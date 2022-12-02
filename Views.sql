@@ -105,3 +105,13 @@ SELECT last_name,first_name, salary,
     avg(salary) over(partition by department_id) as avgsal_dep ,
     avg(salary) over(partition by job_id) as avgsal_job    
 FROM employees 
+--Solution one usin correlated subquery
+
+select EMPLOYEE_ID,FIRST_NAME,LAST_NAME,HIRE_DATE,j.JOB_TITLE,d.DEPARTMENT_NAME,e.salary as Employee_salary,
+(select avg(emp.salary) from DEPARTMENTS join EMPLOYEES emp on DEPARTMENTS.DEPARTMENT_ID=emp.DEPARTMENT_ID where DEPARTMENTS.DEPARTMENT_ID=e.DEPARTMENT_ID ) as avgdept,
+(select avg(emp.SALARY) from JOBS join EMPLOYEES emp on JOBS.JOB_ID=emp.JOB_ID where JOBS.JOB_ID=e.JOB_ID ) as avgjobs 
+from EMPLOYEES e 
+join JOBS j on j.JOB_ID= e.JOB_ID 
+join DEPARTMENTS d on d.DEPARTMENT_ID=e.DEPARTMENT_ID
+
+
